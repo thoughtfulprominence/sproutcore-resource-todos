@@ -27,6 +27,11 @@ Todos.todosController = SC.ResourceCollection.create({
     });
   },
 
+  watchForCompletion: function() {
+    if (SC.none(Todos) || SC.none(Todos.todosController)) { return }
+    Todos.todosController.get('content').forEach(function(t) { t.save() });
+  }.observes('@each.isDone'),
+
   remaining: function() {
     return this.filterProperty('isDone', false).get('length');
   }.property('@each.isDone'),

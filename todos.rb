@@ -40,6 +40,16 @@ class Todos < Sinatra::Base
     todo_as_json(todo).to_json
   end
 
+  put '/todos/:id' do
+    id = BSON::ObjectId(params[:id])
+
+    todos.update({ :_id => id }, { title:params[:title], isDone:params[:isDone] })
+
+    todo = todos.find_one(id)
+    content_type :json
+    todo_as_json(todo).to_json
+  end
+
   delete '/todos/:id' do
     todos.remove({:_id => BSON::ObjectId(params[:id])})
     200
